@@ -1,0 +1,5 @@
+Catatan Untuk PUSS & PULL Di github
+
+git remote add origin https://github.com/Ferryawan/MBKM6_latihan_DDBTelkom.git
+git branch -M main
+git push -u origin main
