@@ -1,7 +1,8 @@
-import { Controller, Get, HttpCode, Post, Res, Header, Redirect, Param, Body, } from "@nestjs/common";
+import { Controller, Get, HttpCode, Post, Res, Header, Redirect, Param, Body, Put, Delete, } from "@nestjs/common";
 import { response } from "express";
 import { request } from "http";
 import { CreateHeroDto } from "./dto/create-hero.dto";
+import { UpdateHeroDto } from "./dto/update-hero.dto";
  let heroes = [
       {
             id: 1,
@@ -32,8 +33,11 @@ export class HeroController {
             response.json(heroes);
       }
       @Get('detail/:id')
-      show(@Param('id') id:string){
-            return'hero by' + id;
+      show(@Param('id') id:number){
+           const hero = heroes.filter((hero) => {
+                 return hero.id == id;
+            });
+            return hero[0];
       }
 
 
@@ -60,6 +64,26 @@ export class HeroController {
             response.status(500).json({message: error});
            }
       }
+      @Put("update/:id")
+      update(@Param('id') id:number,@Body() updateHeroDto: UpdateHeroDto ) {
+            heroes.filter((hero) => {
+                  if(hero.id == id) {
+                        hero.nama=updateHeroDto.nama;
+                        hero.type=updateHeroDto.type;
+                  }
+            });
+            return heroes;
+      }
+      @Delete('destroy/:id')
+      destroy(@Param('id') id:number){
+           const hero = heroes.filter((hero) => {
+                 return hero.id != id;
+            });
+            return hero;
+      }
+
+
+
       @Get("/welcome")
       @Redirect('https://docs.nestjs.com/')
       hello() {
